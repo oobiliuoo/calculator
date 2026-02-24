@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff9500">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>计算器 - 带历史记录</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="calculator">
+        <!-- 显示屏区域 -->
+        <div class="display-container">
+            <!-- 历史记录区域 -->
+            <div class="history-section" id="historySection">
+                <div class="history-header-row">
+                    <span class="history-label">最近记录</span>
+                    <button class="btn-history-toggle" id="btnHistoryToggle" title="查看全部历史">
+                        <span>历史记录 ▾</span>
+                    </button>
+                </div>
+                <div class="history-list-mini" id="historyListMini">
+                    <!-- 最近5条历史记录将动态插入这里 -->
+                </div>
+            </div>
+            
+            <!-- 完整历史记录弹窗 -->
+            <div class="history-modal" id="historyModal">
+                <div class="history-modal-header">
+                    <h3>计算历史</h3>
+                    <button class="btn-modal-close" id="btnModalClose">✕</button>
+                </div>
+                <div class="history-modal-list" id="historyModalList">
+                    <!-- 所有历史记录将动态插入这里 -->
+                </div>
+                <div class="history-modal-footer">
+                    <button class="btn-clear-history" id="btnClearHistory">清空历史</button>
+                </div>
+            </div>
+            
+            <!-- 计算显示区域 -->
+            <div class="display">
+                <div class="display-expression" id="displayExpression">
+                    <span class="expression-text" id="expressionText"></span>
+                </div>
+                <div class="display-preview" id="displayPreview"></div>
+                <div class="display-result" id="displayResult">0</div>
+            </div>
+        </div>
+        
+        <!-- 按钮区域 -->
+        <div class="buttons">
+            <div class="row">
+                <button class="btn function" data-action="clear">CE</button>
+                <button class="btn function" data-action="backspace">⌫</button>
+                <button class="btn function" data-action="percent">%</button>
+                <button class="btn operator" data-operator="÷">÷</button>
+            </div>
+            <div class="row">
+                <button class="btn number" data-value="7">7</button>
+                <button class="btn number" data-value="8">8</button>
+                <button class="btn number" data-value="9">9</button>
+                <button class="btn operator" data-operator="×">×</button>
+            </div>
+            <div class="row">
+                <button class="btn number" data-value="4">4</button>
+                <button class="btn number" data-value="5">5</button>
+                <button class="btn number" data-value="6">6</button>
+                <button class="btn operator" data-operator="-">-</button>
+            </div>
+            <div class="row">
+                <button class="btn number" data-value="1">1</button>
+                <button class="btn number" data-value="2">2</button>
+                <button class="btn number" data-value="3">3</button>
+                <button class="btn operator" data-operator="+">+</button>
+            </div>
+            <div class="row">
+                <button class="btn number" data-value="0" data-double>0</button>
+                <button class="btn number" data-value=".">.</button>
+                <button class="btn equals" data-action="equals">=</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered:', registration);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>

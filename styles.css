@@ -1,0 +1,485 @@
+/* 计算器样式 - 现代化设计 */
+
+:root {
+    /* 颜色变量 */
+    --bg-primary: #f5f5f5;
+    --bg-calculator: #ffffff;
+    --bg-display: #1a1a2e;
+    --text-display: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    
+    --btn-number-bg: #ffffff;
+    --btn-operator-bg: #ff9500;
+    --btn-equals-bg: #ff9500;
+    --btn-function-bg: #a5a5a5;
+    --btn-hover: #e0e0e0;
+    
+    --history-bg: #252540;
+    --history-item-bg: #2d2d4a;
+    --history-hover: #3a3a5a;
+    --history-border: #3d3d5c;
+    --history-text-muted: #8888aa;
+    
+    /* 阴影 */
+    --shadow-calculator: 0 10px 40px rgba(0, 0, 0, 0.15);
+    --shadow-button: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+    /* 圆角 */
+    --radius-calculator: 20px;
+    --radius-button: 12px;
+    --radius-display: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.calculator {
+    background: var(--bg-calculator);
+    border-radius: var(--radius-calculator);
+    box-shadow: var(--shadow-calculator);
+    padding: 24px;
+    width: 340px;
+}
+
+/* 显示屏容器 */
+.display-container {
+    background: var(--bg-display);
+    border-radius: var(--radius-display);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+/* 历史记录区域 */
+.history-section {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--history-border);
+}
+
+.history-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.history-label {
+    color: var(--history-text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-history-toggle {
+    background: transparent;
+    border: none;
+    color: var(--history-text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-history-toggle:hover {
+    background: var(--history-hover);
+    color: var(--text-display);
+}
+
+.history-list-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.history-list-mini::-webkit-scrollbar {
+    width: 4px;
+}
+
+.history-list-mini::-webkit-scrollbar-thumb {
+    background: var(--history-border);
+    border-radius: 2px;
+}
+
+.history-item-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: var(--history-item-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.history-item-mini:hover {
+    background: var(--history-hover);
+    transform: translateX(4px);
+}
+
+.history-item-mini .expr {
+    color: var(--history-text-muted);
+    font-size: 13px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-item-mini .result {
+    color: var(--text-display);
+    font-size: 15px;
+    font-weight: 500;
+    margin-left: 12px;
+}
+
+.history-empty-mini {
+    color: var(--history-text-muted);
+    font-size: 13px;
+    text-align: center;
+    padding: 16px;
+}
+
+/* 计算显示区域 */
+.display {
+    padding: 20px 16px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    word-break: break-all;
+}
+
+.display-expression {
+    color: var(--history-text-muted);
+    font-size: 16px;
+    margin-bottom: 8px;
+    min-height: 24px;
+    text-align: right;
+}
+
+/* 可点击的运算符样式 */
+.expression-operator {
+    display: inline-block;
+    padding: 2px 6px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255, 149, 0, 0.2);
+    color: #ff9500;
+}
+
+.expression-operator:hover {
+    background: rgba(255, 149, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.expression-number {
+    color: var(--history-text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.expression-number:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-display);
+}
+
+/* 实时预览结果 */
+.display-preview {
+    color: rgba(255, 149, 0, 0.7);
+    font-size: 18px;
+    font-weight: 400;
+    text-align: right;
+    min-height: 24px;
+    margin-bottom: 4px;
+}
+
+.display-result {
+    color: var(--text-display);
+    font-size: 44px;
+    font-weight: 300;
+    text-align: right;
+}
+
+/* 按钮区域 */
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    height: 56px;
+    border: none;
+    border-radius: var(--radius-button);
+    font-size: 22px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: var(--shadow-button);
+}
+
+.btn:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+/* 数字按钮 */
+.btn.number {
+    background: var(--btn-number-bg);
+    color: var(--text-primary);
+}
+
+.btn.number:hover {
+    background: var(--btn-hover);
+}
+
+/* 操作符按钮 */
+.btn.operator {
+    background: var(--btn-operator-bg);
+    color: white;
+    font-size: 26px;
+}
+
+.btn.operator:hover {
+    background: #e68900;
+}
+
+/* 等于按钮 */
+.btn.equals {
+    background: var(--btn-equals-bg);
+    color: white;
+    font-size: 26px;
+}
+
+.btn.equals:hover {
+    background: #e68900;
+}
+
+/* 功能按钮 */
+.btn.function {
+    background: var(--btn-function-bg);
+    color: white;
+    font-size: 18px;
+}
+
+.btn.function:hover {
+    background: #8a8a8a;
+}
+
+/* 双宽按钮（数字0） */
+.btn[data-double] {
+    flex: 2;
+}
+
+/* 历史记录弹窗 */
+.history-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 360px;
+    max-height: 70vh;
+    background: var(--bg-display);
+    border-radius: var(--radius-calculator);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.history-modal.active {
+    display: flex;
+}
+
+.history-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--history-border);
+}
+
+.history-modal-header h3 {
+    color: var(--text-display);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.btn-modal-close {
+    background: transparent;
+    border: none;
+    color: var(--history-text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-modal-close:hover {
+    background: var(--history-hover);
+    color: var(--text-display);
+}
+
+.history-modal-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.history-modal-item {
+    background: var(--history-item-bg);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.history-modal-item:hover {
+    background: var(--history-hover);
+    transform: translateX(4px);
+}
+
+.history-modal-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 删除按钮 */
+.btn-delete-history {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff6666;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.history-modal-item:hover .btn-delete-history {
+    opacity: 1;
+}
+
+.btn-delete-history:hover {
+    background: #ff4444;
+    color: white;
+}
+
+.history-modal-item .expr {
+    color: var(--history-text-muted);
+    font-size: 13px;
+    margin-bottom: 4px;
+    word-break: break-all;
+}
+
+.history-modal-item .result {
+    color: var(--text-display);
+    font-size: 20px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.history-modal-empty {
+    color: var(--history-text-muted);
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 14px;
+}
+
+.history-modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--history-border);
+}
+
+.btn-clear-history {
+    width: 100%;
+    padding: 12px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-clear-history:hover {
+    background: #ff6666;
+}
+
+/* 遮罩层 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.modal-overlay.active {
+    display: block;
+}
+
+/* 响应式设计 */
+@media (max-width: 400px) {
+    .calculator {
+        width: 100%;
+        padding: 16px;
+    }
+    
+    .btn {
+        height: 52px;
+        font-size: 20px;
+    }
+    
+    .display-result {
+        font-size: 38px;
+    }
+}

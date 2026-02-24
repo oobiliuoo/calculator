@@ -25,6 +25,7 @@ const modalOverlay = document.getElementById('modalOverlay');
 let currentInput = '';
 let expression = '';
 let history = [];
+let lastValidState = { expression: '', currentInput: '', result: '' }; // 保存上一次有效的状态
 
 // ==================== 计算引擎（纯函数） ====================
 
@@ -508,12 +509,18 @@ function handleEquals() {
     displayExpression.textContent = expression.replace(/\*/g, '×').replace(/\//g, '÷');
     displayResult.textContent = result;
     
-    // 保存到历史记录
+    // 保存到历史记录（只有成功时才保存）
     if (result !== 'Error') {
         addHistory(
             expression.replace(/\*/g, '×').replace(/\//g, '÷'),
             result
         );
+        // 保存有效的状态，用于Error时恢复
+        lastValidState = {
+            expression: expression,
+            currentInput: '',
+            result: result
+        };
     }
     
     // 重置表达式和输入
@@ -525,6 +532,15 @@ function handleEquals() {
  * 处理清除（CE）
  */
 function handleClear() {
+    // 如果当前显示Error，尝试恢复到上一次有效状态
+    if (displayResult.textContent === 'Error' && lastValidState.result) {
+        expression = lastValidState.expression;
+        currentInput = lastValidState.result;
+        updateDisplay();
+        return;
+    }
+    
+    // 正常清除
     currentInput = '';
     expression = '';
     updateDisplay();
